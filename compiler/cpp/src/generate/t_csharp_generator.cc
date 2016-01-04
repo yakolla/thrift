@@ -602,7 +602,7 @@ std::string t_csharp_generator::render_const_value(ofstream& out, string name, t
         throw "compiler error: no const of base type " + t_base_type::t_base_name(tbase);
     }
   } else if (type->is_enum()) {
-    render << type->get_name() << "." << value->get_identifier_name();
+	  render << type_name(type)  << "." << value->get_identifier_name();
   } else {
     string t = tmp("tmp");
     print_const_value(out, t, type, value, true, true, true);
