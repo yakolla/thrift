@@ -356,10 +356,10 @@ namespace Thrift.Protocol
          */
         public override void WriteFloat(float dub)
         {
-            byte[] data = new byte[] { 0, 0, 0, 0 };
-            float[] floats = new[] { dub };
-            Buffer.BlockCopy(floats, 0, data, 0, 4);
-            trans.Write(data);
+            //byte[] data = new byte[] { 0, 0, 0, 0 };
+            //float[] floats = new[] { dub };
+            //Buffer.BlockCopy(floats, 0, data, 0, 4);
+            trans.Write(BitConverter.GetBytes(dub), 0, 4);
         }
 
         /**
