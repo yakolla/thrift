@@ -143,6 +143,11 @@ namespace Thrift.Protocol
             WrappedProtocol.WriteI64(l);
         }
 
+        public override void WriteFloat(float v)
+        {
+            WrappedProtocol.WriteFloat(v);
+        }
+
         public override void WriteDouble(double v)
         {
             WrappedProtocol.WriteDouble(v);
@@ -241,6 +246,11 @@ namespace Thrift.Protocol
         public override long ReadI64()
         {
             return WrappedProtocol.ReadI64();
+        }
+
+        public override float ReadFloat()
+        {
+            return WrappedProtocol.ReadFloat();
         }
 
         public override double ReadDouble()

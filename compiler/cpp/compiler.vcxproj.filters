@@ -77,7 +77,7 @@
     <ClInclude Include="src\windows\version.h">
       <Filter>windows</Filter>
     </ClInclude>
-    <ClInclude Include="src\thrifty.tab.h" />
+    <ClInclude Include="src\thrifty.hh" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="windows">
@@ -169,7 +169,7 @@
       <Filter>parse</Filter>
     </ClCompile>
     <ClCompile Include="src\thriftl.flex.cpp" />
-    <ClCompile Include="src\thrifty.tab.cpp" />
+    <ClCompile Include="src\thrifty.cc" />
   </ItemGroup>
   <ItemGroup>
     <Bison Include="src\thrifty.y" />

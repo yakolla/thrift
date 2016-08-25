@@ -828,6 +828,7 @@ void t_delphi_generator::init_known_types_list() {
   types_known[ type_name( g_type_i16)] = 1;
   types_known[ type_name( g_type_i32)] = 1;
   types_known[ type_name( g_type_i64)] = 1;
+  types_known[type_name(g_type_float)] = 1;
   types_known[ type_name( g_type_double)] = 1;
 }
 

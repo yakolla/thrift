@@ -45,9 +45,7 @@
     <ClInclude Include="src\parse\t_type.h" />
     <ClInclude Include="src\parse\t_typedef.h" />
     <ClInclude Include="src\platform.h" />
-    <ClInclude Include="src\thrifty.tab.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="src\thrifty.hh" />
     <ClInclude Include="src\windows\config.h" />
     <ClInclude Include="src\windows\version.h" />
   </ItemGroup>
@@ -82,9 +80,7 @@
     <ClCompile Include="src\thriftl.flex.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\thrifty.tab.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="src\thrifty.cc" />
   </ItemGroup>
   <ItemGroup>
     <Flex Include="src\thriftl.l">
@@ -92,6 +88,8 @@
     </Flex>
     <Bison Include="src\thrifty.y">
       <FileType>Document</FileType>
+      <OutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename).cc</OutputFile>
+      <DefinesFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename).hh</DefinesFile>
     </Bison>
   </ItemGroup>
   <PropertyGroup Label="Globals">

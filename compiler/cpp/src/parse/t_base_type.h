@@ -41,6 +41,7 @@ class t_base_type : public t_type {
     TYPE_I16,
     TYPE_I32,
     TYPE_I64,
+	TYPE_FLOAT,
     TYPE_DOUBLE
   };
 
@@ -120,6 +121,7 @@ class t_base_type : public t_type {
       case TYPE_I16    : return       "i16"; break;
       case TYPE_I32    : return       "i32"; break;
       case TYPE_I64    : return       "i64"; break;
+	  case TYPE_FLOAT: return       "float"; break;
       case TYPE_DOUBLE : return    "double"; break;
       default          : return "(unknown)"; break;
     }

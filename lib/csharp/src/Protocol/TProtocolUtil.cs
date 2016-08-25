@@ -46,6 +46,9 @@ namespace Thrift.Protocol
                 case TType.I64:
                     prot.ReadI64();
                     break;
+                case TType.Float:
+                    prot.ReadFloat();
+                    break;
                 case TType.Double:
                     prot.ReadDouble();
                     break;

@@ -673,6 +673,14 @@ string t_java_generator::render_const_value(ofstream& out, t_type* type, t_const
       case t_base_type::TYPE_I64:
         render << value->get_integer() << "L";
         break;
+	  case t_base_type::TYPE_FLOAT:
+		  if (value->get_type() == t_const_value::CV_INTEGER) {
+			  render << "(float)" << value->get_integer();
+		  }
+		  else {
+			  render << "(float)" << value->get_double();
+		  }
+		  break;
       case t_base_type::TYPE_DOUBLE:
         if (value->get_type() == t_const_value::CV_INTEGER) {
           render << "(double)" << value->get_integer();
@@ -1601,6 +1609,9 @@ void t_java_generator::generate_java_struct_parcelable(ofstream& out,
 			  case t_base_type::TYPE_BYTE:
 				  indent(out) << "out.writeByte(" << name << ");" << endl;
 				  break;
+			  case t_base_type::TYPE_FLOAT:
+				  indent(out) << "out.writeFloat(" << name << ");" << endl;
+				  break;
 			  case t_base_type::TYPE_DOUBLE:
 				  indent(out) << "out.writeDouble(" << name << ");" << endl;
 				  break;
@@ -1695,6 +1706,9 @@ void t_java_generator::generate_java_struct_parcelable(ofstream& out,
 				  break;
 			  case t_base_type::TYPE_BYTE:
 				  indent(out) << prefix << " = in.readByte();" << endl;
+				  break;
+			  case t_base_type::TYPE_FLOAT:
+				  indent(out) << prefix << " = in.readFloat();" << endl;
 				  break;
 			  case t_base_type::TYPE_DOUBLE:
 				  indent(out) << prefix << " = in.readDouble();" << endl;
@@ -2413,6 +2427,7 @@ std::string t_java_generator::get_java_type_string(t_type* type) {
       case t_base_type::TYPE_I16    : return       "org.apache.thrift.protocol.TType.I16"; break;
       case t_base_type::TYPE_I32    : return       "org.apache.thrift.protocol.TType.I32"; break;
       case t_base_type::TYPE_I64    : return       "org.apache.thrift.protocol.TType.I64"; break;
+	  case t_base_type::TYPE_FLOAT: return    "org.apache.thrift.protocol.TType.FLOAT"; break;
       case t_base_type::TYPE_DOUBLE : return    "org.apache.thrift.protocol.TType.DOUBLE"; break;
       default :
         throw std::runtime_error("Unknown thrift type \"" + type->get_name() + "\" passed to t_java_generator::get_java_type_string!");
@@ -3321,6 +3336,9 @@ void t_java_generator::generate_deserialize_field(ofstream& out,
       case t_base_type::TYPE_I64:
         out << "readI64();";
         break;
+	  case t_base_type::TYPE_FLOAT:
+		  out << "readFloat();";
+		  break;
       case t_base_type::TYPE_DOUBLE:
         out << "readDouble();";
         break;
@@ -3584,6 +3602,9 @@ void t_java_generator::generate_serialize_field(ofstream& out,
         case t_base_type::TYPE_I64:
           out << "writeI64(" << name << ");";
           break;
+		case t_base_type::TYPE_FLOAT:
+			out << "writeFloat(" << name << ");";
+			break;
         case t_base_type::TYPE_DOUBLE:
           out << "writeDouble(" << name << ");";
           break;
@@ -3821,6 +3842,8 @@ string t_java_generator::base_type_name(t_base_type* type,
       return (in_container ? "Integer" : "int");
     case t_base_type::TYPE_I64:
       return (in_container ? "Long" : "long");
+	case t_base_type::TYPE_FLOAT:
+		return (in_container ? "Float" : "float");
     case t_base_type::TYPE_DOUBLE:
       return (in_container ? "Double" : "double");
     default:
@@ -3859,6 +3882,9 @@ string t_java_generator::declare_field(t_field* tfield, bool init, bool comment)
         case t_base_type::TYPE_I64:
           result += " = 0";
           break;
+		case t_base_type::TYPE_FLOAT:
+			result += " = (float)0";
+			break;
         case t_base_type::TYPE_DOUBLE:
           result += " = (double)0";
           break;
@@ -4015,6 +4041,8 @@ string t_java_generator::type_to_enum(t_type* type) {
         return "org.apache.thrift.protocol.TType.I32";
       case t_base_type::TYPE_I64:
         return "org.apache.thrift.protocol.TType.I64";
+	  case t_base_type::TYPE_FLOAT:
+		  return "org.apache.thrift.protocol.TType.FLOAT";
       case t_base_type::TYPE_DOUBLE:
         return "org.apache.thrift.protocol.TType.DOUBLE";
     }
@@ -4477,6 +4505,9 @@ void t_java_generator::generate_java_struct_clear(std::ofstream& out, t_struct* 
       case t_base_type::TYPE_I64:
         indent(out) << "this." << field->get_name() << " = 0;" << endl;
         break;
+	  case t_base_type::TYPE_FLOAT:
+		  indent(out) << "this." << field->get_name() << " = 0.0f;" << endl;
+		  break;
       case t_base_type::TYPE_DOUBLE:
         indent(out) << "this." << field->get_name() << " = 0.0;" << endl;
         break;

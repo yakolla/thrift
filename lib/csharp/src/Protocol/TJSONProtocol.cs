@@ -81,6 +81,7 @@ namespace Thrift.Protocol
         private static byte[] NAME_I16 = new byte[] { (byte)'i', (byte)'1', (byte)'6' };
         private static byte[] NAME_I32 = new byte[] { (byte)'i', (byte)'3', (byte)'2' };
         private static byte[] NAME_I64 = new byte[] { (byte)'i', (byte)'6', (byte)'4' };
+        private static byte[] NAME_FLOAT = new byte[] { (byte)'f', (byte)'l', (byte)'t' };
         private static byte[] NAME_DOUBLE = new byte[] { (byte)'d', (byte)'b', (byte)'l' };
         private static byte[] NAME_STRUCT = new byte[] { (byte)'r', (byte)'e', (byte)'c' };
         private static byte[] NAME_STRING = new byte[] { (byte)'s', (byte)'t', (byte)'r' };
@@ -102,6 +103,8 @@ namespace Thrift.Protocol
                     return NAME_I32;
                 case TType.I64:
                     return NAME_I64;
+                case TType.Float:
+                    return NAME_FLOAT;
                 case TType.Double:
                     return NAME_DOUBLE;
                 case TType.String:
@@ -127,6 +130,9 @@ namespace Thrift.Protocol
             {
                 switch (name[0])
                 {
+                    case (byte)'f':
+                        result = TType.Float;
+                        break;
                     case (byte)'d':
                         result = TType.Double;
                         break;
@@ -693,6 +699,11 @@ namespace Thrift.Protocol
             WriteJSONInteger(i64);
         }
 
+        public override void WriteFloat(float dub)
+        {
+            WriteJSONDouble(dub);
+        }
+
         public override void WriteDouble(double dub)
         {
             WriteJSONDouble(dub);
@@ -1068,6 +1079,11 @@ namespace Thrift.Protocol
         public override long ReadI64()
         {
             return (long)ReadJSONInteger();
+        }
+
+        public override float ReadFloat()
+        {
+            return (float)ReadJSONDouble();
         }
 
         public override double ReadDouble()

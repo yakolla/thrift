@@ -74,6 +74,7 @@ t_type* g_type_byte;
 t_type* g_type_i16;
 t_type* g_type_i32;
 t_type* g_type_i64;
+t_type* g_type_float;
 t_type* g_type_double;
 
 /**
@@ -777,6 +778,12 @@ void validate_const_rec(std::string name, t_type* type, t_const_value* value) {
         throw "type error: const \"" + name + "\" was declared as i64";
       }
       break;
+	case t_base_type::TYPE_FLOAT:
+		if (value->get_type() != t_const_value::CV_INTEGER &&
+			value->get_type() != t_const_value::CV_DOUBLE) {
+			throw "type error: const \"" + name + "\" was declared as float";
+		}
+		break;
     case t_base_type::TYPE_DOUBLE:
       if (value->get_type() != t_const_value::CV_INTEGER &&
           value->get_type() != t_const_value::CV_DOUBLE) {
@@ -1195,6 +1202,7 @@ int main(int argc, char** argv) {
   g_type_i16    = new t_base_type("i16",    t_base_type::TYPE_I16);
   g_type_i32    = new t_base_type("i32",    t_base_type::TYPE_I32);
   g_type_i64    = new t_base_type("i64",    t_base_type::TYPE_I64);
+  g_type_float = new t_base_type("float", t_base_type::TYPE_FLOAT);
   g_type_double = new t_base_type("double", t_base_type::TYPE_DOUBLE);
 
   // Parse it!
@@ -1222,6 +1230,7 @@ int main(int argc, char** argv) {
   delete g_type_i16;
   delete g_type_i32;
   delete g_type_i64;
+  delete g_type_float;
   delete g_type_double;
 
   // Finished

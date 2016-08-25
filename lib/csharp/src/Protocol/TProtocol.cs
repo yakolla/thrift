@@ -82,6 +82,7 @@ namespace Thrift.Protocol
         public abstract void WriteI16(short i16);
         public abstract void WriteI32(int i32);
         public abstract void WriteI64(long i64);
+        public abstract void WriteFloat(float d);
         public abstract void WriteDouble(double d);
         public virtual void WriteString(string s) {
             WriteBinary(Encoding.UTF8.GetBytes(s));
@@ -105,6 +106,7 @@ namespace Thrift.Protocol
         public abstract short ReadI16();
         public abstract int ReadI32();
         public abstract long ReadI64();
+        public abstract float ReadFloat();
         public abstract double ReadDouble();
         public virtual string ReadString() {
             var buf = ReadBinary();

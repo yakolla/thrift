@@ -591,6 +591,14 @@ std::string t_csharp_generator::render_const_value(ofstream& out, string name, t
       case t_base_type::TYPE_I64:
         render << value->get_integer();
         break;
+	  case t_base_type::TYPE_FLOAT:
+		  if (value->get_type() == t_const_value::CV_INTEGER) {
+			  render << value->get_integer();
+		  }
+		  else {
+			  render << value->get_double();
+		  }
+		  break;
       case t_base_type::TYPE_DOUBLE:
         if (value->get_type() == t_const_value::CV_INTEGER) {
           render << value->get_integer();
@@ -2179,6 +2187,9 @@ void t_csharp_generator::generate_deserialize_field(ofstream& out, t_field* tfie
         case t_base_type::TYPE_I64:
           out << "ReadI64();";
           break;
+		case t_base_type::TYPE_FLOAT:
+			out << "ReadFloat();";
+			break;
         case t_base_type::TYPE_DOUBLE:
           out << "ReadDouble();";
           break;
@@ -2354,6 +2365,9 @@ void t_csharp_generator::generate_deserialize_list_element(ofstream& out, t_list
         case t_base_type::TYPE_I64:
           out << "WriteI64(" << nullable_name << ");";
           break;
+		case t_base_type::TYPE_FLOAT:
+			out << "WriteFloat(" << nullable_name << ");";
+			break;
         case t_base_type::TYPE_DOUBLE:
           out << "WriteDouble(" << nullable_name << ");";
           break;
@@ -2675,6 +2689,8 @@ string t_csharp_generator::base_type_name(t_base_type* tbase, bool in_container,
       return "int" + postfix;
     case t_base_type::TYPE_I64:
       return "long" + postfix;
+	case t_base_type::TYPE_FLOAT:
+		return "float" + postfix;
     case t_base_type::TYPE_DOUBLE:
       return "double" + postfix;
     default:
@@ -2709,6 +2725,9 @@ string t_csharp_generator::declare_field(t_field* tfield, bool init, std::string
         case t_base_type::TYPE_I64:
           result += " = 0";
           break;
+		case t_base_type::TYPE_FLOAT:
+			result += " = (float)0";
+			break;
         case t_base_type::TYPE_DOUBLE:
           result += " = (double)0";
           break;
@@ -2786,6 +2805,8 @@ string t_csharp_generator::type_to_enum(t_type* type) {
         return "TType.I32";
       case t_base_type::TYPE_I64:
         return "TType.I64";
+	  case t_base_type::TYPE_FLOAT:
+		  return "TType.Float";
       case t_base_type::TYPE_DOUBLE:
         return "TType.Double";
     }

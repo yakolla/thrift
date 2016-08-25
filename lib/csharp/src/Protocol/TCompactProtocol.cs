@@ -62,6 +62,7 @@ namespace Thrift.Protocol
             public const byte SET = 0x0A;
             public const byte MAP = 0x0B;
             public const byte STRUCT = 0x0C;
+            public const byte FLOAT = 0x0D;
         }
 
         /**
@@ -111,6 +112,7 @@ namespace Thrift.Protocol
             ttypeToCompactType[(int)TType.I16] = Types.I16;
             ttypeToCompactType[(int)TType.I32] = Types.I32;
             ttypeToCompactType[(int)TType.I64] = Types.I64;
+            ttypeToCompactType[(int)TType.Float] = Types.FLOAT;
             ttypeToCompactType[(int)TType.Double] = Types.DOUBLE;
             ttypeToCompactType[(int)TType.String] = Types.BINARY;
             ttypeToCompactType[(int)TType.List] = Types.LIST;
@@ -350,6 +352,17 @@ namespace Thrift.Protocol
         }
 
         /**
+         * Write a float to the wire as 4 bytes.
+         */
+        public override void WriteFloat(float dub)
+        {
+            byte[] data = new byte[] { 0, 0, 0, 0 };
+            float[] floats = new[] { dub };
+            Buffer.BlockCopy(floats, 0, data, 0, 4);
+            trans.Write(data);
+        }
+
+        /**
          * Write a double to the wire as 8 bytes.
          */
         public override void WriteDouble(double dub)
@@ -469,6 +482,14 @@ namespace Thrift.Protocol
             buf[off + 5] = (byte)((n >> 40) & 0xff);
             buf[off + 6] = (byte)((n >> 48) & 0xff);
             buf[off + 7] = (byte)((n >> 56) & 0xff);
+        }
+
+        private void fixedIntToBytes(int n, byte[] buf, int off)
+        {
+            buf[off + 0] = (byte)(n & 0xff);
+            buf[off + 1] = (byte)((n >> 8) & 0xff);
+            buf[off + 2] = (byte)((n >> 16) & 0xff);
+            buf[off + 3] = (byte)((n >> 24) & 0xff);
         }
 
         #endregion
@@ -652,6 +673,16 @@ namespace Thrift.Protocol
         }
 
         /**
+         * No magic here - just Read a float off the wire.
+         */
+        public override float ReadFloat()
+        {
+            byte[] longBits = new byte[4];
+            trans.ReadAll(longBits, 0, 4);
+            return BitConverter.ToSingle(longBits, 0);
+        }
+
+        /**
          * No magic here - just Read a double off the wire.
          */
         public override double ReadDouble()
@@ -792,6 +823,15 @@ namespace Thrift.Protocol
               ((bytes[0] & 0xffL));
         }
 
+        private int bytesToInt(byte[] bytes)
+        {
+            return
+              ((bytes[3] & 0xff) << 24) |
+              ((bytes[2] & 0xff) << 16) |
+              ((bytes[1] & 0xff) << 8) |
+              ((bytes[0] & 0xff));
+        }
+
         //
         // type testing and converting
         //
@@ -823,6 +863,8 @@ namespace Thrift.Protocol
                     return TType.I32;
                 case Types.I64:
                     return TType.I64;
+                case Types.FLOAT:
+                    return TType.Float;
                 case Types.DOUBLE:
                     return TType.Double;
                 case Types.BINARY:

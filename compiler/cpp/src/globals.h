@@ -77,6 +77,7 @@ extern t_type* g_type_byte;
 extern t_type* g_type_i16;
 extern t_type* g_type_i32;
 extern t_type* g_type_i64;
+extern t_type* g_type_float;
 extern t_type* g_type_double;
 
 /**

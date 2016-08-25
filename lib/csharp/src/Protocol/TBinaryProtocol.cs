@@ -195,6 +195,16 @@ namespace Thrift.Protocol
             trans.Write(i64out, 0, 8);
         }
 
+        public override void WriteFloat(float d)
+        {
+#if !SILVERLIGHT
+            WriteI32((int)BitConverter.DoubleToInt64Bits(d));
+#else
+            var bytes = BitConverter.GetBytes(d);
+            WriteI32(BitConverter.ToInt32(bytes, 0));
+#endif
+        }
+
         public override void WriteDouble(double d)
         {
 #if !SILVERLIGHT
@@ -359,6 +369,17 @@ namespace Thrift.Protocol
         }
 
 #pragma warning restore 675
+
+        public override float ReadFloat()
+        {
+#if !SILVERLIGHT
+            return (float)BitConverter.Int64BitsToDouble(ReadI32());
+#else
+            var value = ReadI32();
+            var bytes = BitConverter.GetBytes(value);
+            return BitConverter.ToFloat(bytes, 0);
+#endif
+        }
 
         public override double ReadDouble()
         {

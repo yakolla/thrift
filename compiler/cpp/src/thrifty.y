@@ -144,6 +144,7 @@ const int struct_is_union = 1;
 %token tok_i16
 %token tok_i32
 %token tok_i64
+%token tok_float
 %token tok_double
 
 /**
@@ -1188,6 +1189,11 @@ SimpleBaseType:
     {
       pdebug("BaseType -> tok_i64");
       $$ = g_type_i64;
+    }
+| tok_float
+    {
+      pdebug("BaseType -> tok_float");
+      $$ = g_type_float;
     }
 | tok_double
     {
